@@ -1,15 +1,16 @@
 from __future__ import annotations
-from typing import TypeVar, List, Generic, Tuple, Union, Any, Iterator
+from typing import TypeVar, List, Generic, Tuple, Union, Any, Iterator, Type, get_type_hints
+from typing_inspect import get_generic_type
 
-__author__ = "Bilal El Uneis"
+__author__ = "Bilal El Uneis & Jieshu Wang"
 __since__ = "Dec 2019"
-__email__ = "bilaleluneis@gmail.com"
+__email__ = "bilaleluneis@gmail.com, foundwonder@gmail.com"
 
 _Type = TypeVar('_Type')
 
 
 class Grid(Generic[_Type]):
-    __slots__ = ('__rows', '__cols', '__grid')
+    # TODO: add frozen
 
     def __init__(self, rows: int, cols: int) -> None:
         if rows <= 0 or cols <= 0:
@@ -17,7 +18,7 @@ class Grid(Generic[_Type]):
         self.__rows: int = rows
         self.__cols: int = cols
         self.__grid: List[List[Union[_Type, None]]] = []
-        self.__initalize()
+        self.__initialize()
 
     def __repr__(self) -> str:
         return self.__describe()
@@ -43,7 +44,11 @@ class Grid(Generic[_Type]):
         return False
 
     def __eq__(self, grid: Any) -> bool:
-        if type(grid) is not Grid[_Type]:
+        if type(grid) is not Grid:
+            return False
+        self_type = get_generic_type(self)
+        compare_type = get_generic_type(grid)
+        if self_type != compare_type:
             return False
         if self.dimension != grid.dimension:
             return False
@@ -54,7 +59,7 @@ class Grid(Generic[_Type]):
         return True
 
     def __ne__(self, grid: Any) -> bool:
-        return not self.__eq__(grid)
+        return not self == grid
 
     @property
     def dimension(self) -> Tuple[int, int]:
@@ -73,7 +78,7 @@ class Grid(Generic[_Type]):
             grid_repr += "]\n"
         return grid_repr
 
-    def __initalize(self) -> None:
+    def __initialize(self) -> None:
         for row_index in range(self.__rows):
             row: List[Union[_Type, None]] = []
             for col_index in range(self.__cols):

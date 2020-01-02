@@ -1,18 +1,18 @@
 from unittest import TestCase, main
 from ai.types.grid import Grid
 
-__author__ = "Bilal El Uneis"
+__author__ = "Bilal El Uneis & Jieshu Wang"
 __since__ = "Dec 2019"
-__email__ = "bilaleluneis@gmail.com"
+__email__ = "bilaleluneis@gmail.com, foundwonder@gmail.com"
 
 
 class GridTests(TestCase):
 
     def setUp(self) -> None:
         self.__grid_a: Grid[int] = Grid[int](4, 4)  # one way to init
-        self.__grid_b: Grid[int] = Grid(4, 4)  # another way to init and keep type checker happy !
-        self.__grid_c: Grid[int] = Grid(2, 2)
-        self.__grid_d: Grid[str] = Grid(4, 4)
+        self.__grid_b: Grid[int] = Grid[int](4, 4)  # another way to init and keep type checker happy !
+        self.__grid_c: Grid[int] = Grid[int](2, 2)
+        self.__grid_d: Grid[str] = Grid[str](4, 4)
 
     def test_bad_init(self) -> None:
         with self.assertRaises(IndexError):
@@ -39,6 +39,17 @@ class GridTests(TestCase):
         self.assertFalse(1 in self.__grid_a)
         self.__grid_a[3][3] = 1
         self.assertTrue(1 in self.__grid_a)
+
+    def test_equal_operator(self) -> None:
+        self.assertFalse(self.__grid_a == self.__grid_c)  # different dimensions
+        self.assertFalse(self.__grid_a == self.__grid_d)  # different types
+        self.assertTrue(self.__grid_a == self.__grid_b)
+        # set values to be not equal
+        self.__grid_a[0][3] = 1
+        self.assertFalse(self.__grid_a == self.__grid_b)
+        # set values to be equal
+        self.__grid_b[0][3] = 1
+        self.assertTrue(self.__grid_a == self.__grid_b)
 
 
 if __name__ == '__main__':
