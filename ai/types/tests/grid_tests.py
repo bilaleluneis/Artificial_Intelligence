@@ -51,6 +51,17 @@ class GridTests(TestCase):
         self.__grid_b[0][3] = 1
         self.assertTrue(self.__grid_a == self.__grid_b)
 
+    def test_not_equal_operator(self) -> None:
+        self.assertTrue(self.__grid_a != self.__grid_c)  # different dimensions
+        self.assertTrue(self.__grid_a != self.__grid_d)  # different types
+        self.assertFalse(self.__grid_a != self.__grid_b)
+        # set values to be not equal
+        self.__grid_a[0][3] = 1
+        self.assertTrue(self.__grid_a != self.__grid_b)
+        # set values to be equal
+        self.__grid_b[0][3] = 1
+        self.assertFalse(self.__grid_a != self.__grid_b)
+
 
 if __name__ == '__main__':
     main()
