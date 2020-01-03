@@ -1,6 +1,7 @@
 from __future__ import annotations
-from typing import TypeVar, List, Generic, Tuple, Union, Any, Iterator, Type, get_type_hints
-from typing_inspect import get_generic_type
+from typing import TypeVar, List, Generic, Tuple, Union, Any, Iterator
+from typing_inspect import get_generic_type # type: ignore
+from ai.types.utils import frozen
 
 __author__ = "Bilal El Uneis & Jieshu Wang"
 __since__ = "Dec 2019"
@@ -9,8 +10,8 @@ __email__ = "bilaleluneis@gmail.com, foundwonder@gmail.com"
 _Type = TypeVar('_Type')
 
 
+@frozen
 class Grid(Generic[_Type]):
-    # TODO: add frozen
 
     def __init__(self, rows: int, cols: int) -> None:
         if rows <= 0 or cols <= 0:
@@ -22,9 +23,6 @@ class Grid(Generic[_Type]):
 
     def __repr__(self) -> str:
         return self.__describe()
-
-    def __len__(self) -> int:
-        return len(self.__grid)
 
     def __getitem__(self, row: int) -> List[Union[_Type, None]]:
         if row not in range(self.__rows):
@@ -47,8 +45,8 @@ class Grid(Generic[_Type]):
         if type(grid) is not Grid:
             return False
         self_type = get_generic_type(self)
-        compare_type = get_generic_type(grid)
-        if self_type != compare_type:
+        grid_type = get_generic_type(grid)
+        if self_type != grid_type:
             return False
         if self.dimension != grid.dimension:
             return False
