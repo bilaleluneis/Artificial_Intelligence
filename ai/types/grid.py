@@ -1,6 +1,6 @@
 from __future__ import annotations
 from typing import TypeVar, List, Generic, Tuple, Union, Any, Iterator
-from typing_inspect import get_generic_type # type: ignore
+from typing_inspect import get_generic_type  # type: ignore
 from ai.types.utils import frozen
 
 __author__ = "Bilal El Uneis & Jieshu Wang"
