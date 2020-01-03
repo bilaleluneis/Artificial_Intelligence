@@ -50,10 +50,9 @@ class Grid(Generic[_Type]):
             return False
         if self.dimension != grid.dimension:
             return False
-        for row in range(self.__rows):
-            for col in range(self.__cols):
-                if self[row][col] != grid[row][col]:
-                    return False
+        for self_item, grid_item in zip(self, grid):
+            if self_item != grid_item:
+                return False
         return True
 
     def __ne__(self, grid: Any) -> bool:
