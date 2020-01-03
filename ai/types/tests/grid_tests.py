@@ -23,21 +23,23 @@ class GridTests(TestCase):
         self.assertEqual((rows, cols), (4, 4))
         for row in range(rows):
             for col in range(cols):
-                self.assertEqual(self.__grid_a[row][col], None)
+                self.assertEqual(self.__grid_a[row, col], None)
 
     def test_index_access(self) -> None:
-        self.__grid_a[0][3] = 1
-        self.assertEqual(self.__grid_a[0][3], 1)
+        self.__grid_a[0, 3] = 1
+        self.assertEqual(self.__grid_a[0, 3], 1)
+        with self.assertRaises(TypeError):
+            self.__grid_a[1, 2] = True
 
     def test_out_of_range_index_access(self) -> None:
         with self.assertRaises(IndexError):
-            self.__grid_a[0][5] = 1  # access invalid col
+            self.__grid_a[0, 5] = 1  # access invalid col
         with self.assertRaises(IndexError):
-            self.__grid_a[5][1] = 1  # access invalid row
+            self.__grid_a[5, 1] = 1  # access invalid row
 
     def test_contains(self) -> None:
         self.assertFalse(1 in self.__grid_a)
-        self.__grid_a[3][3] = 1
+        self.__grid_a[3, 3] = 1
         self.assertTrue(1 in self.__grid_a)
 
     def test_equal_operator(self) -> None:
@@ -45,10 +47,10 @@ class GridTests(TestCase):
         self.assertFalse(self.__grid_a == self.__grid_d)  # different types
         self.assertTrue(self.__grid_a == self.__grid_b)
         # set values to be not equal
-        self.__grid_a[0][3] = 1
+        self.__grid_a[0, 3] = 1
         self.assertFalse(self.__grid_a == self.__grid_b)
         # set values to be equal
-        self.__grid_b[0][3] = 1
+        self.__grid_b[0, 3] = 1
         self.assertTrue(self.__grid_a == self.__grid_b)
 
     def test_not_equal_operator(self) -> None:
@@ -56,10 +58,10 @@ class GridTests(TestCase):
         self.assertTrue(self.__grid_a != self.__grid_d)  # different types
         self.assertFalse(self.__grid_a != self.__grid_b)
         # set values to be not equal
-        self.__grid_a[0][3] = 1
+        self.__grid_a[0, 3] = 1
         self.assertTrue(self.__grid_a != self.__grid_b)
         # set values to be equal
-        self.__grid_b[0][3] = 1
+        self.__grid_b[0, 3] = 1
         self.assertFalse(self.__grid_a != self.__grid_b)
 
 

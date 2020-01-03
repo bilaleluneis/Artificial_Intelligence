@@ -1,6 +1,6 @@
 from __future__ import annotations
 from typing import TypeVar, List, Generic, Tuple, Union, Any, Iterator
-from typing_inspect import get_generic_type  # type: ignore
+from typing_inspect import get_generic_type, get_args  # type: ignore
 from ai.types.utils import frozen
 
 __author__ = "Bilal El Uneis & Jieshu Wang"
@@ -24,16 +24,27 @@ class Grid(Generic[_Type]):
     def __repr__(self) -> str:
         return self.__describe()
 
-    def __getitem__(self, row: int) -> List[Union[_Type, None]]:
-        if row not in range(self.__rows):
-            raise IndexError(f"[row]= [{row}] is not a valid index on Grid")
-        return self.__grid[row]
+    def __getitem__(self, index: Tuple[int, int]) -> Union[_Type, None]:
+        row, col = index
+        if row not in range(self.__rows) or col not in range(self.__cols):
+            raise IndexError(f"[row, col]= [{row}, {col}] is not a valid index on Grid")
+        return self.__grid[row][col]
+
+    def __setitem__(self, index: Tuple[int, int], value: _Type) -> None:
+        row, col = index
+        if row not in range(self.__rows) or col not in range(self.__cols):
+            raise IndexError(f"[row, col]= [{row}, {col}] is not a valid index on Grid")
+        grid_type = get_args(get_generic_type(self))
+        value_type = (type(value), )
+        if grid_type != value_type:
+            raise TypeError(f"value type is not valid , expected {grid_type} but got {value_type}")
+        self.__grid[row][col] = value
 
     def __iter__(self) -> Iterator[Union[_Type, None]]:
         rows, cols = self.dimension
         for row in range(rows):
             for col in range(cols):
-                yield self[row][col]
+                yield self[row, col]
 
     def __contains__(self, value: Union[_Type, None]) -> bool:
         for item in self:
